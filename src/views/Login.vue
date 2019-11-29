@@ -49,18 +49,18 @@
         },
         methods: {
             submitForm() {
-                console.log(this.loginForm.username+' '+this.loginForm.password);
+                var v=this;
                 this.$axios({
                     method: 'get',
-                    url: 'localhost:8088/user/login',
+                    url: api.base_url+'/user/login',
                 }).then(function(res){
                     var json = res.data;
-                    console.log(json.data);
-                    this.$store.commit('ADD_COUNT', json.data.token);
-                    this.$message('登录成功');
-                }.bind(this)).catch(function(err){
-                    this.$message('密码或用户名错误');
-                }.bind(this))
+                    console.log(json);
+                    v.$store.commit('ADD_COUNT', json.data.token);
+                    v.$message('登录成功');
+                }).catch(function(err){
+                    v.$message('密码或用户名错误');
+                })
             }
         }
     }
