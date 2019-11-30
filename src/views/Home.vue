@@ -1,9 +1,11 @@
 <template>
   <div class="home">
     <el-container>
-      <Header/>
-      <el-main>首页</el-main>
-      <el-footer>Footer</el-footer>
+<!--      <Header/>-->
+<!--      <el-main>首页</el-main>-->
+<!--      <el-footer>Footer</el-footer>-->
+      <el-button @click="exit">退出登录</el-button>
+      <el-button @click="test">携带token的测试请求</el-button>
     </el-container>
   </div>
 </template>
@@ -12,12 +14,29 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import Header from "../components/Header";
+import api from "../constant/api";
 
 export default {
   name: 'home',
   components: {
     Header,
     HelloWorld
+  },
+  methods:{
+    exit(){
+      localStorage.removeItem('Authorization');
+      this.$router.push('/login');
+    },
+    test(){
+      this.$axios({
+        method: 'get',
+        url: api.base_url+'/user/test',
+      }).then(function(res){
+        console.log("res",res);
+      }).catch(function(err){
+        console.log("err",err);
+      })
+    }
   }
 }
 </script>
