@@ -1,12 +1,19 @@
 <template>
   <div class="home">
-    <el-container>
-<!--      <Header/>-->
-<!--      <el-main>首页</el-main>-->
-<!--      <el-footer>Footer</el-footer>-->
-      <el-button @click="exit">退出登录</el-button>
-      <el-button @click="test">携带token的测试请求</el-button>
-    </el-container>
+      <el-container>
+          <el-header>
+              <Header></Header>
+          </el-header>
+<!--          <el-main>-->
+          <div style="margin-top:50px; margin-left: 40px; width: 1200px; text-align: left">
+              <Search></Search>
+          </div>
+
+<!--          </el-main>-->
+<!--          <el-footer>-->
+<!--              <Footer></Footer>-->
+<!--          </el-footer>-->
+      </el-container>
   </div>
 </template>
 
@@ -14,11 +21,15 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import api from "../constant/api";
+import Search from "../components/Search";
 
 export default {
   name: 'home',
   components: {
+      Search,
+      Footer,
     Header,
     HelloWorld
   },
@@ -29,8 +40,11 @@ export default {
     },
     test(){
       this.$axios({
-        method: 'get',
+        method: 'post',
         url: api.base_url+'/user/test',
+          data:{
+            "post":"post",
+          }
       }).then(function(res){
         console.log("res",res);
       }).catch(function(err){
@@ -42,24 +56,17 @@ export default {
 </script>
 <style>
   .el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
     line-height: 60px;
   }
-
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
-
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    line-height: 600px;
+  }
+  .el-aside {
+      background-color: #D3DCE6;
+      color: #333;
+      line-height: 200px;
   }
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
