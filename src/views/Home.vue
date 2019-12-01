@@ -5,14 +5,43 @@
               <Header></Header>
           </el-header>
 <!--          <el-main>-->
-          <div style="margin-top:50px; margin-left: 40px; width: 1200px; text-align: left">
-              <Search></Search>
-          </div>
-
+              <div style="text-align: center;">
+                  <div style="margin:0px auto; width: 500px;">
+                  <h3 class="sign-title">余票查询</h3>
+                  <div>
+                      <el-form>
+                          <el-form-item label="出发地">
+                              <el-select v-model="st" placeholder="请选择出发地" >
+                                  <el-option
+                                          v-for="item in options"
+                                          :key="item.value"
+                                          :label="item.label"
+                                          :value="item.value">
+                                  </el-option>
+                              </el-select>
+                          </el-form-item>
+                          <el-form-item label="到达地">
+                              <el-select v-model="ed" placeholder="请选择到达地">
+                                  <el-option
+                                          v-for="item in options"
+                                          :key="item.value"
+                                          :label="item.label"
+                                          :value="item.value">
+                                  </el-option>
+                              </el-select>
+                          </el-form-item>
+                          <el-form-item label="出发时间">
+                              <el-date-picker type="date" placeholder="选择出发日期" v-model="date" ></el-date-picker>
+                          </el-form-item>
+                          <el-form-item>
+                              <el-button type="primary" @click="onSubmit" style="width: 100%;">查询</el-button>
+                          </el-form-item>
+                      </el-form>
+                  </div>
+                  </div>
+              </div>
 <!--          </el-main>-->
-<!--          <el-footer>-->
-<!--              <Footer></Footer>-->
-<!--          </el-footer>-->
+          <el-footer></el-footer>
       </el-container>
   </div>
 </template>
@@ -24,9 +53,18 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import api from "../constant/api";
 import Search from "../components/Search";
+import stations from "../constant/data";
 
 export default {
   name: 'home',
+    data(){
+      return{
+          options:stations,
+          st:'',
+          ed:'',
+          date:'',
+      }
+    },
   components: {
       Search,
       Footer,
@@ -38,6 +76,10 @@ export default {
       localStorage.removeItem('Authorization');
       this.$router.push('/login');
     },
+      onSubmit() {
+          console.log('submit!');
+          this.$message(this.st+' '+this.ed+' '+this.date);
+      },
     test(){
       this.$axios({
         method: 'post',
@@ -62,11 +104,6 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     line-height: 600px;
-  }
-  .el-aside {
-      background-color: #D3DCE6;
-      color: #333;
-      line-height: 200px;
   }
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
