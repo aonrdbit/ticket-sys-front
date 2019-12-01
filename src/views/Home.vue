@@ -6,12 +6,12 @@
           </el-header>
 <!--          <el-main>-->
               <div style="text-align: center;">
-                  <div style="margin:0px auto; width: 500px;">
+                  <div style="margin:0px auto; width: 300px;">
                   <h3 class="sign-title">余票查询</h3>
-                  <div>
-                      <el-form>
+                  <div style="text-align: justify">
+                      <el-form label-position="left" label-width="80px">
                           <el-form-item label="出发地">
-                              <el-select v-model="st" placeholder="请选择出发地" >
+                              <el-select v-model="st" filterable placeholder="请选择出发地" >
                                   <el-option
                                           v-for="item in options"
                                           :key="item.value"
@@ -21,7 +21,7 @@
                               </el-select>
                           </el-form-item>
                           <el-form-item label="到达地">
-                              <el-select v-model="ed" placeholder="请选择到达地">
+                              <el-select v-model="ed" filterable placeholder="请选择到达地">
                                   <el-option
                                           v-for="item in options"
                                           :key="item.value"

@@ -6,6 +6,10 @@ const stations=[
     {
         value:'gzd',
         label:'广州东'
+    },
+    {
+        value:'bzx',
+        label:'北京西'
     }
 ];
 
