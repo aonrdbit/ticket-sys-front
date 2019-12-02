@@ -27,6 +27,13 @@ const routes = [
     component:function () {
       return import('../views/Login.vue');
     }
+  },
+  {
+    path:'/list',
+    name:'list',
+    component:function () {
+      return import('../views/SearchResult.vue');
+    }
   }
 ]
 
