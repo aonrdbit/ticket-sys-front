@@ -65,10 +65,6 @@
             HelloWorld
         },
         methods: {
-            exit() {
-                localStorage.removeItem('Authorization');
-                this.$router.push('/login');
-            },
             onSubmit() {
                 console.log('submit!');
                 this.$message(this.st + ' ' + this.ed + ' ' + this.date);
@@ -90,9 +86,7 @@
     }
 </script>
 <style>
-    .el-header, .el-footer {
-        line-height: 60px;
-    }
+
 
     .el-main {
         background-color: #E9EEF3;

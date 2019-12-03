@@ -64,7 +64,7 @@
                     console.log(res.data);
                     v.userToken = 'Bearer ' + res.data.token;
                     // 将用户token保存到vuex中
-                    v.changeLogin({ Authorization:v.userToken });
+                    v.changeLogin({ Authorization:v.userToken,username:v.loginForm.username});
                     v.$router.push('/home');
                     v.$message('登录成功');
                 }).catch(function(err){

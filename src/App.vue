@@ -48,4 +48,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.el-header, .el-footer {
+  line-height: 60px;
+}
 </style>
