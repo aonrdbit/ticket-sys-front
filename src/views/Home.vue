@@ -41,11 +41,9 @@
 
 <script>
     // @ is an alias to /src
-    import HelloWorld from '@/components/HelloWorld.vue'
     import Header from "../components/Header";
     import Footer from "../components/Footer";
     import api from "../constant/api";
-    import Search from "../components/Search";
     import stations from "../constant/data";
 
     export default {
@@ -59,10 +57,8 @@
             }
         },
         components: {
-            Search,
             Footer,
             Header,
-            HelloWorld
         },
         methods: {
             onSubmit() {
