@@ -11,6 +11,12 @@
                     <el-button icon="el-icon-close" circle @click="exit">退出登录</el-button>
                 </el-row>
             </div>
+            <div v-else style="float: right;">
+                <el-row>
+                    <el-button icon="el-icon-user" circle @click="register">注册</el-button>
+                    <el-button icon="el-icon-close" circle @click="login">登录</el-button>
+                </el-row>
+            </div>
         </el-menu>
     </div>
 </template>
@@ -35,10 +41,12 @@
                 this.$router.push('/login');
             },
             gohome() {
-                this.$router.push({path: '/home'});
+                this.$router.push({path: '/'});
             },
-            //检查登录状态
-            check() {
+            register(){
+
+            },
+            login(){
 
             },
             handleSelect(key, keyPath) {

@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import fr from "element-ui/src/locale/lang/fr";
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: Home,
   },
@@ -45,7 +46,7 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     let token = localStorage.getItem('Authorization');
-    if (token === 'null' || token === '') {
+    if (to.path==='/order' && (token === null || token === '')) {
       next('/login');
     } else {
       next();

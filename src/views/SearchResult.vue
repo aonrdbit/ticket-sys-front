@@ -147,6 +147,16 @@
             },
             handleClick(row) {
                 console.log(row);
+                //手动判断有没有登录,没登录的话把数据存到local里
+                let token=localStorage.getItem('Authorization');
+                if(token===null){
+                    this.$router.replace({
+                        name:"login",
+                        query: {redirect: this.$router.currentRoute.fullPath}
+                    })
+                }else{
+                    this.$router.push({path: '/order'});
+                }
             }
         }
     }

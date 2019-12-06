@@ -53,9 +53,9 @@
             <el-divider></el-divider>
             <div v-if="active===1">
                 <div>
-                    <el-collapse v-for="c in seats">
+                    <el-collapse v-for="c in seats" :key="c.cx">
                         <el-collapse-item :title="c.cx+'车厢'">
-                            <el-checkbox @change="handleSeat(c.cx,s.no,s.id,s.check)" v-model="s.check" style="float: left;" v-for="s in c.ss" :disabled="s.dis">{{s.no}}</el-checkbox>
+                            <el-checkbox @change="handleSeat(c.cx,s.no,s.id,s.check)" v-model="s.check" style="float: left;" v-for="s in c.ss" :disabled="s.dis" :key="s.id">{{s.no}}</el-checkbox>
                         </el-collapse-item>
                     </el-collapse>
                 </div>
