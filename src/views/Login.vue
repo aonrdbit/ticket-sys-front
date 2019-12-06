@@ -1,7 +1,7 @@
 <template>
     <div>
+                <Header></Header>
         <div class="signin-form">
-
             <h3 class="sign-title">ticket-sys 登录</h3>
             <div>
                 <el-form :model="loginForm" :rules="rules" status-icon ref="ruleForm" class="demo-ruleForm">
@@ -23,7 +23,8 @@
                         ></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm" id="login-btn">登录</el-button>
+                        <el-button type="primary" @click="submitForm" class="login-btn">登录</el-button>
+<!--                        <el-button type="info" @click="goRegister" class="login-btn">注册</el-button>-->
                     </el-form-item>
                 </el-form>
             </div>
@@ -68,27 +69,35 @@
                     }
                 }).then(function (res) {
                     console.log(res.data);
-                    v.userToken = 'Bearer ' + res.data.token;
-                    // 将用户token保存到vuex中
-                    v.changeLogin({Authorization: v.userToken, username: v.loginForm.username});
-                    //判断是否有redirect参数
-                    if(v.$route.query.redirect!==null){
-                        v.$router.push(v.$route.query.redirect);
+                    if(res.data.msg==="true"){
+                        v.userToken = 'Bearer ' + res.data.token;
+                        // 将用户token保存到vuex中
+                        v.changeLogin({Authorization: v.userToken, username: v.loginForm.username,userId:res.data.userId});
+                        //判断是否有redirect参数
+                        console.log(v.$route.query.redirect)
+                        if(v.$route.query.redirect!==null && v.$route.query.redirect!==undefined && v.$route.query.redirect!=="/register"){
+                            v.$router.push(v.$route.query.redirect);
+                        }else{
+                            v.$router.push('/');
+                        }
+                        v.$message('登录成功');
                     }else{
-                        v.$router.push('/home');
+                        v.$message('密码或用户名错误');
                     }
-                    v.$message('登录成功');
                 }).catch(function (err) {
                     console.log("err", err);
                     v.$message('密码或用户名错误');
                 })
+            },
+            goRegister(){
+                this.$router.push("/register")
             }
         }
     }
 </script>
 
 <style scoped>
-    #login-btn {
+    .login-btn {
         width: 100%;
     }
 

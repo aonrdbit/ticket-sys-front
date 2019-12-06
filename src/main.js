@@ -21,6 +21,7 @@ axios.interceptors.request.use(
     config => {
       if (localStorage.getItem('Authorization')) {
         config.headers.Authorization = localStorage.getItem('Authorization');
+          console.log(config.headers)
       }
 
       return config;

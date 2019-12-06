@@ -1,5 +1,6 @@
 <template>
     <div style="text-align: center;">
+        <Header></Header>
         <div style="height: 50px;"></div>
         <div style="margin: auto; width: 1040px;">
             <el-steps :active="active" finish-status="success">
@@ -73,8 +74,12 @@
 </template>
 
 <script>
+    import Header from "../components/Header";
+    import api from "../constant/api";
+    import {mapMutations} from "vuex";
     export default {
         name: "Buy",
+        components: {Header},
         data() {
             return {
                 active: 0,
@@ -180,7 +185,44 @@
             },
             next() {
                 if (this.active++ > 2) this.active = 0;
+            },
+            submitForm() {
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    url: api.base_url + '/user/login',
+                    data: {
+                        'username': "a",
+                        'password': "b"
+                    }
+                }).then(function (res) {
+                    console.log(res.data);
+                }).catch(function (err) {
+                    console.log("err", err);
+                    v.$message('密码或用户名错误');
+                })
+            },
+            getAllPassenger(){
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    //改成/passenger/all就带不了token ！！
+                    url: api.base_url + '/user/login',
+                    data: {
+                        'username': "a",
+                        'password': "b"
+                    }
+                }).then(function (res) {
+                    console.log(res.data);
+                }).catch(function (err) {
+                    console.log("err", err);
+                    v.$message('密码或用户名错误');
+                })
             }
+        },
+        created() {
+            // this.submitForm();
+            this.getAllPassenger();
         }
     }
 </script>

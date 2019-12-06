@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+        <Header></Header>
         <div style="text-align: center;">
             <div style="height: 200px;"></div>
             <div style="margin:0 auto; width: 300px;">

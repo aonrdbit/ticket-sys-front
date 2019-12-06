@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header>
-        <Header v-if="tabType"/>
-      </el-header>
-      <router-view></router-view>
-      <el-footer></el-footer>
-    </el-container>
+    <router-view></router-view>
+<!--    <el-container>-->
+<!--      <el-header>-->
+<!--        <Header v-if="tabType"/>-->
+<!--      </el-header>-->
+
+<!--      <el-footer></el-footer>-->
+<!--    </el-container>-->
   </div>
 </template>
 
@@ -28,7 +29,7 @@ export default {
   watch: {
     //监听路由
     $route(e) {
-      if (e.name == 'login'){
+      if (e.name == 'login' && e.name=='register'){
         this.tabType = false;
       } else {
         this.tabType = true;

@@ -1,5 +1,6 @@
 <template>
     <div style="text-align: center;">
+        <Header></Header>
         <div style="height: 50px;"></div>
         <div>
             <el-form ref="form" :inline="true">
@@ -93,8 +94,10 @@
 </template>
 
 <script>
+    import Header from "../components/Header";
     export default {
         name: "SearchResult",
+        components: {Header},
         data() {
             return {
                 st: '',
