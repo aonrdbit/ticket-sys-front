@@ -186,31 +186,15 @@
             next() {
                 if (this.active++ > 2) this.active = 0;
             },
-            submitForm() {
-                let v = this;
-                this.$axios({
-                    method: 'post',
-                    url: api.base_url + '/user/login',
-                    data: {
-                        'username': "a",
-                        'password': "b"
-                    }
-                }).then(function (res) {
-                    console.log(res.data);
-                }).catch(function (err) {
-                    console.log("err", err);
-                    v.$message('密码或用户名错误');
-                })
-            },
             getAllPassenger(){
                 let v = this;
                 this.$axios({
                     method: 'post',
                     //改成/passenger/all就带不了token ！！
-                    url: api.base_url + '/user/login',
+                    // url: api.base_url + '/user/login',
+                    url: api.base_url + '/user/passenger/all',
                     data: {
-                        'username': "a",
-                        'password': "b"
+                        "userId":v.$store.state.userId,
                     }
                 }).then(function (res) {
                     console.log(res.data);
@@ -221,7 +205,6 @@
             }
         },
         created() {
-            // this.submitForm();
             this.getAllPassenger();
         }
     }

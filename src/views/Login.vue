@@ -70,7 +70,7 @@
                 }).then(function (res) {
                     console.log(res.data);
                     if(res.data.msg==="true"){
-                        v.userToken = 'Bearer ' + res.data.token;
+                        v.userToken = res.data.token;
                         // 将用户token保存到vuex中
                         v.changeLogin({Authorization: v.userToken, username: v.loginForm.username,userId:res.data.userId});
                         //判断是否有redirect参数
