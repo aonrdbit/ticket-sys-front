@@ -158,7 +158,7 @@
                         query: {redirect: this.$router.currentRoute.fullPath}
                     })
                 }else{
-                    this.$router.push({path: '/order'});
+                    this.$router.push({path: '/order',query:row});
                 }
             }
         }

@@ -38,6 +38,13 @@ const routes = [
     component:function () {
       return import('../views/Order.vue');
     }
+  },
+  {
+    path:'/user',
+    name:'user',
+    component:function () {
+      return import('../views/User.vue');
+    }
   }
 ]
 

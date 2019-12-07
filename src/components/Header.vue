@@ -7,7 +7,7 @@
             </div>
             <div v-if="this.getStoreItem!==''" style="float: right;">
                 <el-row>
-                    <el-button icon="el-icon-user" circle>{{this.getStoreItem}}</el-button>
+                    <el-button icon="el-icon-user" circle @click="goUser">{{this.getStoreItem}}</el-button>
                     <el-button icon="el-icon-close" circle @click="exit">退出登录</el-button>
                 </el-row>
             </div>
@@ -36,6 +36,9 @@
             }
         },
         methods: {
+            goUser(){
+              this.$router.push("/user")
+            },
             exit() {
                 localStorage.removeItem('Authorization');
                 localStorage.removeItem('username');
