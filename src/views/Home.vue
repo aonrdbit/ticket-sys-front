@@ -10,20 +10,20 @@
                         <el-form-item label="出发地">
                             <el-select v-model="st" filterable placeholder="请选择出发地">
                                 <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
+                                        v-for="item in stations"
+                                        :key="item.label"
                                         :label="item.label"
-                                        :value="item.value">
+                                        :value="item.label">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="到达地">
                             <el-select v-model="ed" filterable placeholder="请选择到达地">
                                 <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
+                                        v-for="item in stations"
+                                        :key="item.label"
                                         :label="item.label"
-                                        :value="item.value">
+                                        :value="item.label">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -45,13 +45,13 @@
     import Header from "../components/Header";
     import Footer from "../components/Footer";
     import api from "../constant/api";
-    import stations from "../constant/data";
+    // import stations from "../constant/data";
 
     export default {
         name: 'home',
         data() {
             return {
-                options: stations,
+                stations:[],
                 st: '',
                 ed: '',
                 date: '',
@@ -65,6 +65,7 @@
             onSubmit() {
                 console.log('submit!');
                 this.$message(this.st + ' ' + this.ed + ' ' + this.date);
+                this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date}});
             },
             test() {
                 this.$axios({
@@ -78,7 +79,29 @@
                 }).catch(function (err) {
                     console.log("err", err);
                 })
+            },
+            getStations(){
+                let v=this;
+                this.$axios({
+                    method: 'get',
+                    url: api.base_url + '/train/station/all',
+                }).then(function (res) {
+                    console.log("res", res);
+                    if(res.data.msg==="true"){
+                        v.stations=res.data.list;
+                    }else{
+                        v.$message("网络或内部错误")
+                    }
+                }).catch(function (err) {
+                    console.log("err", err);
+                })
             }
+        },
+        created() {
+            this.getStations();
+        },
+        mounted() {
+            this.getStations();
         }
     }
 </script>

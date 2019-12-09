@@ -160,7 +160,19 @@
                 }else{
                     this.$router.push({path: '/order',query:row});
                 }
+            },
+            getList(){
+                this.st=this.$route.query.st;
+                this.ed=this.$route.query.ed;
+                this.date=this.$route.query.date;
+                console.log(this.st,this.ed,this.date);
             }
+        },
+        created() {
+            this.getList();
+        },
+        mounted() {
+            this.getList();
         }
     }
 </script>
