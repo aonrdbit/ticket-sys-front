@@ -87,7 +87,12 @@
                 addName: '',
                 addID: '',
                 addPhone:'',
-                friends: [],
+                friends: [
+                    {
+                        "name":"小明",
+                        "idx":"44512**********4456",
+                    }
+                ],
                 multipleSelection: [],
                 seats: [
                     {

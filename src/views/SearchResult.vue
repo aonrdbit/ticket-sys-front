@@ -8,22 +8,22 @@
                     <el-button icon="el-icon-sort" @click="onSwap"/>
                 </el-form-item>
                 <el-form-item label="出发地">
-                    <el-select v-model="st" placeholder="请选择出发地">
+                    <el-select v-model="st" filterable placeholder="请选择出发地">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
+                                v-for="item in stations"
+                                :key="item.label"
                                 :label="item.label"
-                                :value="item.value">
+                                :value="item.label">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="到达地">
-                    <el-select v-model="ed" placeholder="请选择到达地">
+                    <el-select v-model="ed" filterable placeholder="请选择到达地">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
+                                v-for="item in stations"
+                                :key="item.label"
                                 :label="item.label"
-                                :value="item.value">
+                                :value="item.label">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -41,7 +41,7 @@
                     :data="list"
                     style="width: 100%">
                 <el-table-column
-                        prop="id"
+                        prop="trNo"
                         label="车次"
                         width="120">
                 </el-table-column>
@@ -95,6 +95,7 @@
 
 <script>
     import Header from "../components/Header";
+    import api from "../constant/api";
     export default {
         name: "SearchResult",
         components: {Header},
@@ -104,18 +105,10 @@
                 ed: '',
                 value: '',
                 date: '',
-                options: [
-                    {
-                        value: 'gzn',
-                        label: '广州南'
-                    },
-                    {
-                        value: 'gzd',
-                        label: '广州东'
-                    }
-                ],
+                stations:[],
                 list: [
                     {
+                        trNo:'G142',
                         id: 'G142',
                         st: '上海虹桥',
                         ed: '北京南',
@@ -126,6 +119,7 @@
                         sec: '有',
                     },
                     {
+                        trNo:'G146',
                         id: 'G146',
                         st: '上海虹桥',
                         ed: '北京南',
@@ -145,8 +139,7 @@
               this.ed=t;
             },
             onSubmit() {
-                console.log('submit!');
-                this.$message(this.st + ' ' + this.ed + ' ' + this.date);
+                this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date.toString()}});
             },
             handleClick(row) {
                 console.log(row);
@@ -165,13 +158,47 @@
                 this.st=this.$route.query.st;
                 this.ed=this.$route.query.ed;
                 this.date=this.$route.query.date;
-                console.log(this.st,this.ed,this.date);
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    url: api.base_url + '/train/query',
+                    data: {
+                        'st':v.st,
+                        'ed':v.ed,
+                        'date':v.date
+                    }
+                }).then(function (res) {
+                    console.log(res.data);
+                    if (res.data.msg === "true") {
+                        v.list=res.data.list;
+                    } else {
+                        v.$message('网络或内部错误');
+                    }
+                });
+            },
+            getStations(){
+                let v=this;
+                this.$axios({
+                    method: 'get',
+                    url: api.base_url + '/train/station/all',
+                }).then(function (res) {
+                    console.log("res", res);
+                    if(res.data.msg==="true"){
+                        v.stations=res.data.list;
+                    }else{
+                        v.$message("网络或内部错误")
+                    }
+                }).catch(function (err) {
+                    console.log("err", err);
+                })
             }
         },
         created() {
+            this.getStations();
             this.getList();
         },
         mounted() {
+            this.getStations();
             this.getList();
         }
     }
