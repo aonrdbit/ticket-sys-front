@@ -106,30 +106,7 @@
                 value: '',
                 date: '',
                 stations:[],
-                list: [
-                    {
-                        trNo:'G142',
-                        id: 'G142',
-                        st: '上海虹桥',
-                        ed: '北京南',
-                        st_time: '14:10',
-                        ed_time: '20:18',
-                        dur: '06:08 当日到达',
-                        fir: '有',
-                        sec: '有',
-                    },
-                    {
-                        trNo:'G146',
-                        id: 'G146',
-                        st: '上海虹桥',
-                        ed: '北京南',
-                        st_time: '14:50',
-                        ed_time: '20:48',
-                        dur: '05:58 当日到达',
-                        fir: '有',
-                        sec: '有',
-                    }
-                ]
+                list: []
             }
         },
         methods: {
@@ -140,6 +117,7 @@
             },
             onSubmit() {
                 this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date.toString()}});
+                this.getList();
             },
             handleClick(row) {
                 console.log(row);

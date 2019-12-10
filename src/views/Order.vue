@@ -53,8 +53,8 @@
                 <div>
                     <el-collapse v-for="c in seats" :key="c.cx">
                         <el-collapse-item :title="c.cx+'车厢'">
-                            <el-checkbox @change="handleSeat(c.cx,s.no,s.check)" v-model="s.check"
-                                         style="float: left;" v-for="s in c.ss" :disabled="s.dis" :key="s.no">{{s.no}}
+                            <el-checkbox @change="handleSeat(c.cx,s.seNo,s.check)" v-model="s.check"
+                                         style="float: left;" v-for="s in c.ss" :disabled="s.status" :key="s.seNo">{{s.seNo}}
                             </el-checkbox>
                         </el-collapse-item>
                     </el-collapse>
@@ -87,58 +87,21 @@
                 addName: '',
                 addID: '',
                 addPhone:'',
-                friends: [
-                    {
-                        "name":"小明",
-                        "idx":"44512**********4456",
-                    }
-                ],
+                friends: [],
                 multipleSelection: [],
-                seats: [
-                    {
-                        "cx": 1,
-                        "ss": [
-                            {
-                                "no": "01A",
-                                "dis": false,
-                                "check": false
-                            },
-                            {
-                                "no": "01B",
-                                "dis": false,
-                                "check": false
-                            }
-                        ]
-                    },
-                    {
-                        "cx": 2,
-                        "ss": [
-                            {
-                                "no": "01A",
-                                "dis": true,
-                                "check": false
-                            },
-                            {
-                                "no": "01B",
-                                "dis": false,
-                                "check": false
-                            }
-                        ]
-                    }
-                ],
+                seats: [],
                 multipleSeat: []
             };
         },
         methods: {
             submit() {
+                //第三页面实现订单信息
+                //支付创建接口，待填坑
                 this.$message("支付成功");
-            },
-            PrefixInteger(num, length) {
-                return (Array(length).join('0') + num).slice(-length);
             },
             handleSeat(c, s, che) {
                 if (che === true) {
-                    this.multipleSeat.push(this.PrefixInteger(c,2)+'-'+s);
+                    this.multipleSeat.push(s);
                 } else {
                     let idx = 0;
                     for (let i = 0; i < this.multipleSeat.length; i++) {
@@ -189,19 +152,38 @@
                     method: 'post',
                     url: api.base_url + '/user/passenger/all',
                     data: {
-                        "userId": v.$store.state.userId,
+                        "userId": v.$store.state.userId.toString(),
                     }
                 }).then(function (res) {
                     console.log(res.data);
                     v.friends = res.data.list;
                 }).catch(function (err) {
                     console.log("err", err);
-                    v.$message('密码或用户名错误');
+                    v.$message('网络或内部错误');
+                })
+            },
+            getSeats(){
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    url: api.base_url + '/train/seat/all',
+                    data: {
+                        "trId": v.$route.query.trId.toString(),
+                    }
+                }).then(function (res) {
+                    v.seats=res.data.list;
+                }).catch(function (err) {
+                    v.$message('网络或内部错误');
                 })
             }
         },
         created() {
             this.getAllPassenger();
+            this.getSeats();
+        },
+        mounted() {
+            this.getAllPassenger();
+            this.getSeats();
         }
     }
 </script>
