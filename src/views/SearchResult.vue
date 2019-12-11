@@ -129,6 +129,7 @@
                         query: {redirect: this.$router.currentRoute.fullPath}
                     })
                 }else{
+                    row.date=this.date.toString();
                     this.$router.push({path: '/order',query:row});
                 }
             },

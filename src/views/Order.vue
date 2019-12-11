@@ -48,13 +48,14 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <el-divider></el-divider>
             <div v-if="active===1">
+                <el-divider></el-divider>
                 <div>
                     <el-collapse v-for="c in seats" :key="c.cx">
                         <el-collapse-item :title="c.cx+'车厢'">
                             <el-checkbox @change="handleSeat(c.cx,s.seNo,s.check)" v-model="s.check"
-                                         style="float: left;" v-for="s in c.ss" :disabled="s.status" :key="s.seNo">{{s.seNo}}
+                                         style="float: left;" v-for="s in c.ss" :disabled="s.status" :key="s.seNo">
+                                {{fun(s.seNo)}}
                             </el-checkbox>
                         </el-collapse-item>
                     </el-collapse>
@@ -64,6 +65,20 @@
                 <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
             </div>
             <div v-if="active===2">
+                <div>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix" style="padding-bottom: 20px;" >
+                            <span style="float: left;">
+                                {{$route.query.trNo}} {{$route.query.st}}====>{{$route.query.ed}}
+                                {{timeformat($route.query.date)}} {{st_timeformat($route.query.st_time)}}开
+                            </span>
+                            <el-button style="float: right; padding: 3px 0" type="text" >取消订单</el-button>
+                        </div>
+                        <div v-for="o in 4" :key="o" class="text item">
+                            {{'列表内容 ' + o }}
+                        </div>
+                    </el-card>
+                </div>
                 <div v-for="o in multipleSelection">{{o}}</div>
                 <div>车次信息：{{this.$route.query}}</div>
                 <div v-for="v in multipleSeat">{{v}}</div>
@@ -77,16 +92,25 @@
     import Header from "../components/Header";
     import api from "../constant/api";
     import {mapMutations} from "vuex";
-
+    const ms={
+        "Jan":'01',
+        "Feb":"02",
+        "Mar":"03",
+        "Sep":"09",
+        "Oct":"10",
+        "Nov":"11",
+        "Dec":"12",
+    }
     export default {
         name: "Buy",
         components: {Header},
+
         data() {
             return {
                 active: 0,
                 addName: '',
                 addID: '',
-                addPhone:'',
+                addPhone: '',
                 friends: [],
                 multipleSelection: [],
                 seats: [],
@@ -94,6 +118,16 @@
             };
         },
         methods: {
+            st_timeformat(t){
+                return t[0]+t[1]+t[2]+t[3]+t[4];
+            },
+            timeformat(t){
+                //Mon Dec 30 2019 00:00:00 GMT+0800 (China Standard Time)
+                return t[11]+t[12]+t[13]+t[14]+'-'+ms[t[4]+t[5]+t[6]]+'-'+t[8]+t[9];
+            },
+            fun(x){
+                return x.substr(3,5)
+            },
             submit() {
                 //第三页面实现订单信息
                 //支付创建接口，待填坑
@@ -105,7 +139,7 @@
                 } else {
                     let idx = 0;
                     for (let i = 0; i < this.multipleSeat.length; i++) {
-                        if (this.multipleSeat[i] === id) {
+                        if (this.multipleSeat[i] === s.trId) {
                             idx = i;
                         }
                     }
@@ -120,15 +154,15 @@
                     url: api.base_url + '/user/passenger/add',
                     data: {
                         "userId": v.$store.state.userId,
-                        "Name":v.addName,
-                        "ID":v.addID,
-                        "phone":v.addPhone,
+                        "Name": v.addName,
+                        "ID": v.addID,
+                        "phone": v.addPhone,
                     }
                 }).then(function (res) {
                     console.log(res.data);
-                    if(res.data.msg==="true"){
+                    if (res.data.msg === "true") {
                         v.getAllPassenger();
-                    }else{
+                    } else {
                         v.$message("添加错误，请检查信息")
                     }
                 }).catch(function (err) {
@@ -144,6 +178,13 @@
                 if (this.active-- < 0) this.active = 2;
             },
             next() {
+                if(this.active===1){
+                    console.log(this.multipleSelection.length,this.multipleSeat.length)
+                    if(this.multipleSelection.length!==this.multipleSeat.length){
+                        this.$message('每个乘客选择一个座位')
+                        return;
+                    }
+                }
                 if (this.active++ > 2) this.active = 0;
             },
             getAllPassenger() {
@@ -162,7 +203,7 @@
                     v.$message('网络或内部错误');
                 })
             },
-            getSeats(){
+            getSeats() {
                 let v = this;
                 this.$axios({
                     method: 'post',
@@ -171,7 +212,7 @@
                         "trId": v.$route.query.trId.toString(),
                     }
                 }).then(function (res) {
-                    v.seats=res.data.list;
+                    v.seats = res.data.list;
                 }).catch(function (err) {
                     v.$message('网络或内部错误');
                 })
@@ -189,5 +230,11 @@
 </script>
 
 <style scoped>
-
+    .el-checkbox{
+        width:70px;
+        font-size: 20px;
+    }
+    /deep/.el-collapse-item__header{
+        font-size: 15px;
+    }
 </style>

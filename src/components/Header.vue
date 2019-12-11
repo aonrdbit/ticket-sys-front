@@ -5,16 +5,16 @@
                 <img src="../assets/train_logo.png" style="float: left;width: 50px;"/>
                 <span style="float: left; font-size: 20px;margin-top:10px;margin-left: 15px;">Ticket-Sys</span>
             </div>
-            <div v-if="this.getStoreItem!==''" style="float: right;">
+            <div v-if="this.getStoreItem!==''" style="float: right;margin-right: 15px;">
                 <el-row>
-                    <el-button icon="el-icon-user" circle @click="goUser">{{this.getStoreItem}}</el-button>
-                    <el-button icon="el-icon-close" circle @click="exit">退出登录</el-button>
+                    <el-button icon="el-icon-user" type="text" @click="goUser">{{this.getStoreItem}}</el-button>
+                    <el-button icon="el-icon-close" type="text" @click="exit">退出登录</el-button>
                 </el-row>
             </div>
-            <div v-else style="float: right; margin-right: 10px;">
+            <div v-else style="float: right; margin-right: 15px;">
                 <el-row>
-                    <el-button icon="el-icon-user" circle @click="register">注册</el-button>
-                    <el-button icon="el-icon-close" circle @click="login">登录</el-button>
+                    <el-button icon="el-icon-user" @click="register" type="text">注册</el-button>
+                    <el-button icon="el-icon-close" @click="login" type="text">登录</el-button>
                 </el-row>
             </div>
         </el-menu>
@@ -73,5 +73,7 @@
 </script>
 
 <style scoped>
-
+    /deep/.el-button--text{
+        color: black;
+    }
 </style>
