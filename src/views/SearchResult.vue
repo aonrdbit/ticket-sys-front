@@ -43,17 +43,17 @@
                 <el-table-column
                         prop="trNo"
                         label="车次"
-                        width="120">
+                        width="60">
                 </el-table-column>
                 <el-table-column
                         prop="st"
                         label="出发地"
-                        width="120">
+                        width="80">
                 </el-table-column>
                 <el-table-column
                         prop="ed"
                         label="到达地"
-                        width="120">
+                        width="80">
                 </el-table-column>
                 <el-table-column
                         prop="st_time"
@@ -68,17 +68,27 @@
                 <el-table-column
                         prop="dur"
                         label="历时"
-                        width="180">
+                        width="140">
                 </el-table-column>
                 <el-table-column
                         prop="fir"
                         label="一等座"
-                        width="100">
+                        width="70">
+                </el-table-column>
+                <el-table-column
+                        prop="firPrice"
+                        label="一等座价格(元)"
+                        width="120">
                 </el-table-column>
                 <el-table-column
                         prop="sec"
                         label="二等座"
-                        width="100">
+                        width="70">
+                </el-table-column>
+                <el-table-column
+                        prop="secPrice"
+                        label="二等座价格(元)"
+                        width="120">
                 </el-table-column>
                 <el-table-column
                         fixed="right"
