@@ -124,6 +124,8 @@
     import Header from "../components/Header";
     import api from "../constant/api";
     import {mapMutations} from "vuex";
+    import { Loading } from 'element-ui';
+
 
     const ms = {
         "Jan": '01',
@@ -201,6 +203,7 @@
                     console.log(res.data);
                     if (res.data.msg === "true") {
                         v.$message("支付成功");
+                        v.$router.push("/user")
                     } else {
                         v.$message('网络或内部错误');
                     }
@@ -253,10 +256,30 @@
             pre() {
                 if (this.active-- < 0) this.active = 2;
             },
+            openFullScreen() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                return loading;
+            },
+            closeFullScreen(loading){
+                loading.close();
+            },
             next() {
+                if(this.active===0){
+                    // let l=this.openFullScreen();
+                    // while(this.seats!==[]){
+                    //     this.closeFullScreen(l);
+                    // }
+                }
                 if (this.active === 1) {
                     console.log(this.multipleSelection.length, this.multipleSeat.length)
-                    if (this.multipleSelection.length !== this.multipleSeat.length) {
+                    if (this.multipleSelection.length !== this.multipleSeat.length
+                        || this.multipleSelection.length===0
+                        || this.multipleSeat.length===0) {
                         this.$message('每个乘客选择一个座位')
                         return;
                     }
@@ -291,8 +314,11 @@
                     url: api.base_url + '/train/seat/all',
                     data: {
                         "trId": v.$route.query.trId.toString(),
+                        "st":v.$route.query.st,
+                        "ed":v.$route.query.ed,
                     }
                 }).then(function (res) {
+                    console.log(res)
                     v.seats = res.data.list;
                 }).catch(function (err) {
                     v.$message('网络或内部错误');
