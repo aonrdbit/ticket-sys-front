@@ -10,7 +10,7 @@
                             <div slot="header" class="clearfix" style="padding-bottom: 20px;">
                             <span style="float: left;">
                                 {{o.trNo}} {{o.st}}====>{{o.ed}}
-                                {{o.st_date}} {{o.st_time}}开
+                                {{fun(o.st_date)}} {{o.st_time}}开
                             </span>
 <!--                                <el-button style="float: right; padding: 3px 0" type="text" @click="quit">取消订单</el-button>-->
                             </div>
@@ -112,6 +112,15 @@
 </template>
 
 <script>
+    const ms = {
+        "Jan": '01',
+        "Feb": "02",
+        "Mar": "03",
+        "Sep": "09",
+        "Oct": "10",
+        "Nov": "11",
+        "Dec": "12",
+    }
     import Header from "../components/Header";
     import api from "../constant/api";
     export default {
@@ -128,6 +137,9 @@
             };
         },
         methods: {
+            fun(t){
+                return t[24] + t[25] + t[26] + t[27] + '-' + ms[t[4] + t[5] + t[6]] + '-' + t[8] + t[9];
+            },
             getAllOrder() {
                 let v = this;
                 this.$axios({
@@ -209,10 +221,9 @@
                 let v = this;
                 this.$axios({
                     method: 'post',
-                    url: api.base_url + '/user/passenger/del',
+                    url: api.base_url + '/order/del',
                     data: {
-                        "userId": v.$store.state.userId+"",
-                        "psgId":row.psgId+"",
+
                     }
                 }).then(function (res) {
                     console.log(res.data);
