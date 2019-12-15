@@ -182,8 +182,8 @@
                         {
                             stationA: '',
                             stationB: '',
-                            firPrice: 0,
-                            secPrice: 0,
+                            firPrice: '',
+                            secPrice: '',
                             staTime: '',
                             arrTime: '',
                             dwellTime: '',
@@ -325,6 +325,7 @@
                     console.log(res.data);
                     if (res.data.msg === "true") {
                         v.$message('添加成功');
+                        v.$router.push("/admin");
                     } else {
                         v.$message('网络或内部错误');
                     }
