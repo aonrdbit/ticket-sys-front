@@ -37,7 +37,12 @@
         },
         methods: {
             goUser(){
-              this.$router.push("/user")
+                if(localStorage.getItem("username")==='admin'){
+                    this.$router.push("/admin");
+                }else{
+                    this.$router.push("/user")
+                }
+
             },
             exit() {
                 localStorage.removeItem('Authorization');

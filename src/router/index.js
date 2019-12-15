@@ -45,6 +45,13 @@ const routes = [
     component:function () {
       return import('../views/User.vue');
     }
+  },
+  {
+    path:'/admin',
+    name:'admin',
+    component:function () {
+      return import('../views/Admin.vue');
+    }
   }
 ]
 
@@ -60,7 +67,7 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     let token = localStorage.getItem('Authorization');
-    if (to.path==='/order' && (token === null || token === '')) {
+    if ((token === null || token === '')) {
       next('/login');
     } else {
       next();

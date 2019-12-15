@@ -53,7 +53,7 @@
                                             label="操作"
                                             width="120">
                                         <template slot-scope="scope">
-                                            <el-button @click="tui(scope.row)" type="text" size="small">退票</el-button>
+                                            <el-button @click="tui(scope.row,o)" type="text" size="small">退票</el-button>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -120,7 +120,7 @@
         "Oct": "10",
         "Nov": "11",
         "Dec": "12",
-    }
+    };
     import Header from "../components/Header";
     import api from "../constant/api";
     export default {
@@ -217,26 +217,72 @@
                     v.$message('网络或内部错误');
                 })
             },
-            tui(row){
-                let v = this;
-                this.$axios({
-                    method: 'post',
-                    url: api.base_url + '/order/del',
-                    data: {
-
-                    }
-                }).then(function (res) {
-                    console.log(res.data);
-                    if (res.data.msg === "true") {
-                        v.$message('退票成功');
-                        v.getAllPassenger();
-                    } else {
-                        v.$message("网络或内部错误")
-                    }
-                }).catch(function (err) {
-                    console.log("err", err);
-                    v.$message('网络或内部错误');
-                })
+            check(y1,m1,d1,y2,m2,d2){
+                // console.log(y1,m1,d1,y2,m2,d2);
+                var se;
+                if(y2<y1){
+                    se=31-d2+d1;
+                }else{
+                    se=d1-d2;
+                }
+                console.log(se)
+                return se > 7;
+            },
+            tui(row,o){
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = now.getMonth() + 1;
+                var day = now.getDate();
+                // console.log(year,month,day)
+                // console.log(o.st_date)
+                if(row.status==='已退票'){
+                    this.$alert('该车票已退票', '', {
+                        confirmButtonText: '确定',
+                    });
+                    return;
+                }
+                //Mon Dec 30 00:00:00 CST 2019
+                var t=o.st_date;
+                if(!this.check(parseInt(t[24] + t[25] + t[26] + t[27]),parseInt(ms[t[4] + t[5] + t[6]]),parseInt(t[8] + t[9]),year,month,day)){
+                    this.$alert('不可以退开车时间在7天之内的车票', '', {
+                        confirmButtonText: '确定',
+                    });
+                    return;
+                }
+                this.$confirm('确认退票?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let v = this;
+                    this.$axios({
+                        method: 'post',
+                        url: api.base_url + '/order/del',
+                        data: {
+                            "orId":o.orId+"",
+                            "psgId":row.psgId+"",
+                            "seNo":row.cx+"-"+row.zw,
+                            "st":o.st+"",
+                            "ed":o.ed+"",
+                        }
+                    }).then(function (res) {
+                        console.log(res.data);
+                        if (res.data.msg === "true") {
+                            v.$message('退票成功');
+                            v.getAllOrder();
+                        } else {
+                            v.$message("网络或内部错误")
+                        }
+                    }).catch(function (err) {
+                        console.log("err", err);
+                        v.$message('网络或内部错误');
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
             },
             handleClick(tab, event) {
                 console.log(tab, event);

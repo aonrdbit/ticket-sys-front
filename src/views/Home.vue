@@ -64,7 +64,6 @@
         methods: {
             onSubmit() {
                 console.log('submit!');
-                // this.$message(this.st + ' ' + this.ed + ' ' + this.date);
                 this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date.toString()}});
             },
             test() {

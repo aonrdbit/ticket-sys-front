@@ -78,7 +78,11 @@
                         if(v.$route.query.redirect!==null && v.$route.query.redirect!==undefined && v.$route.query.redirect!=="/register"){
                             v.$router.push(v.$route.query.redirect);
                         }else{
-                            v.$router.push('/');
+                            if(v.loginForm.username==='admin'){
+                                v.$router.push("/admin");
+                            }else{
+                                v.$router.push('/');
+                            }
                         }
                         v.$message('登录成功');
                     }else{
