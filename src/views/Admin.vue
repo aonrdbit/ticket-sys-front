@@ -4,78 +4,83 @@
         <div style="height: 10px;"></div>
         <div style="margin: auto; width:100%;">
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="查看车次" name="first">查看车次
-                </el-tab-pane>
-                <el-tab-pane label="添加车次" name="second">
-                    <div style="">
-                        <el-form :model="trains" ref="dynamicValidateForm" label-width="auto;"
-                                 class="demo-dynamic">
-
-                            <!--                            <el-col :span="12">-->
-                            <!--                            <el-form-item class="item">-->
-                            <!--                                <el-button type="primary" @click="addTrain">确认添加车次</el-button>-->
-                            <!--                            </el-form-item>-->
-                            <!--                            </el-col>-->
-                            <div v-for="(ls, index) in trains.list">
-                                <el-row>
-                                    <el-col :span="6">
-                                        <el-form-item label="车次号" class="item">
-                                            <el-input v-model="trains.trNo"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="出发站" class="item">
-                                            <el-input v-model="ls.stationA"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="到达站" class="item">
-                                            <el-input v-model="ls.stationB"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="停留时间" class="item">
-                                            <el-input v-model="ls.dwellTime"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <el-row>
-                                    <el-col :span="6">
-                                        <el-form-item label="出发时间" class="item">
-                                            <el-input v-model="ls.staTime"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="到达时间" class="item">
-                                            <el-input v-model="ls.arrTime"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="5">
-                                        <el-form-item label="一等座价格" class="item">
-                                            <el-input v-model="ls.firPrice"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="5">
-                                        <el-form-item label="二等座价格" class="item">
-                                            <el-input v-model="ls.secPrice"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="2">
-                                        <el-form-item class="item" style="margin-top: 35px;">
-                                            <el-button @click.prevent="removeVia(ls)">删除</el-button>
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                            </div>
-                            <el-row>
-                                <el-button @click="addVia">新增经停车站</el-button>
-                                <el-button type="primary" @click="addTrain">确认添加车次</el-button>
-                            </el-row>
+                <el-tab-pane label="车次管理" name="first">
+                    <div v-if="tabtab==1">
+                        <el-form ref="form" :inline="true">
+                            <el-form-item label="车次号">
+                                <el-input v-model="trNo"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="queryByTrNo">查询</el-button>
+                                <el-button  @click="tabtab=2">添加新车次</el-button>
+                            </el-form-item>
                         </el-form>
                     </div>
+                    <div v-if="tabtab==2">
+                        <div style="">
+                            <el-form :model="trains" ref="dynamicValidateForm" label-width="auto;"
+                                     class="demo-dynamic">
+                                <div v-for="(ls, index) in trains.list">
+                                    <el-row>
+                                        <el-col :span="6">
+                                            <el-form-item label="车次号" class="item">
+                                                <el-input v-model="trains.trNo"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-form-item label="出发站" class="item">
+                                                <el-input v-model="ls.stationA"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-form-item label="到达站" class="item">
+                                                <el-input v-model="ls.stationB"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-form-item label="停留时间" class="item">
+                                                <el-input v-model="ls.dwellTime"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="6">
+                                            <el-form-item label="出发时间" class="item">
+                                                <el-input v-model="ls.staTime"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <el-form-item label="到达时间" class="item">
+                                                <el-input v-model="ls.arrTime"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item label="一等座价格" class="item">
+                                                <el-input v-model="ls.firPrice"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item label="二等座价格" class="item">
+                                                <el-input v-model="ls.secPrice"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="2">
+                                            <el-form-item class="item" style="margin-top: 35px;">
+                                                <el-button @click.prevent="removeVia(ls)">删除</el-button>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                                <el-row>
+                                    <el-button @click="addVia">新增经停车站</el-button>
+                                    <el-button @click="tabtab=1">返回车次查询</el-button>
+                                    <el-button type="primary" @click="addTrain">确认添加车次</el-button>
+                                </el-row>
+                            </el-form>
+                        </div>
+                    </div>
                 </el-tab-pane>
-                <el-tab-pane label="修改车次" name="third">修改车次</el-tab-pane>
-                <el-tab-pane label="订单管理" name="forth">
+                <el-tab-pane label="订单管理" name="second">
                     <div>
                         <el-form ref="form" :inline="true">
                             <el-form-item label="乘客身份证">
@@ -142,9 +147,9 @@
                         </el-card>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="乘客管理" name="fifth">
-                    乘客管理
-                </el-tab-pane>
+<!--                <el-tab-pane label="乘客管理" name="fifth">-->
+<!--                    乘客管理-->
+<!--                </el-tab-pane>-->
             </el-tabs>
         </div>
     </div>
@@ -167,6 +172,8 @@
         name: "Admin",
         data() {
             return {
+                tabtab:1,
+                trNo:'',
                 test: '',
                 ID: '',
                 activeName: 'first',
@@ -330,6 +337,23 @@
                         v.$message('网络或内部错误');
                     }
                 });
+            },
+            queryByTrNo(){
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    url: api.base_url + '/admin/train/query',
+                    data: {
+                        'trNo':v.trNo,
+                    }
+                }).then(function (res) {
+                    console.log(res.data);
+                    if (res.data.msg === "true") {
+                        //log
+                    } else {
+                        v.$message('网络或内部错误');
+                    }
+                });
             }
         },
         created() {
@@ -342,4 +366,10 @@
 </script>
 
 <style scoped>
+    /deep/ .el-tabs__nav{
+        margin-left: 50px;
+    }
+    /deep/ .el-form--inline{
+        margin-top: 30px;
+    }
 </style>

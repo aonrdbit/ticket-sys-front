@@ -66,19 +66,6 @@
                 console.log('submit!');
                 this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date.toString()}});
             },
-            test() {
-                this.$axios({
-                    method: 'post',
-                    url: api.base_url + '/user/test',
-                    data: {
-                        "post": "post",
-                    }
-                }).then(function (res) {
-                    console.log("res", res);
-                }).catch(function (err) {
-                    console.log("err", err);
-                })
-            },
             getStations(){
                 let v=this;
                 this.$axios({
