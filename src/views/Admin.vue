@@ -15,6 +15,64 @@
                                 <el-button  @click="tabtab=2">添加新车次</el-button>
                             </el-form-item>
                         </el-form>
+                        <el-form :model="trains" ref="dynamicValidateForm" label-width="auto;"
+                                 class="demo-dynamic">
+                            <div v-for="(ls, index) in info">
+                                <el-row>
+                                    <el-col :span="6">
+                                        <el-form-item label="车次号" class="item">
+                                            <el-input v-model="trNo" disabled></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-form-item label="出发站" class="item">
+                                            <el-input v-model="ls.stationA"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-form-item label="到达站" class="item">
+                                            <el-input v-model="ls.stationB"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-form-item label="停留时间" class="item">
+                                            <el-input v-model="ls.dwellTime"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="6">
+                                        <el-form-item label="出发时间" class="item">
+                                            <el-input v-model="ls.staTime"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-form-item label="到达时间" class="item">
+                                            <el-input v-model="ls.arrTime"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="5">
+                                        <el-form-item label="一等座价格" class="item">
+                                            <el-input v-model="ls.firPrice"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="5">
+                                        <el-form-item label="二等座价格" class="item">
+                                            <el-input v-model="ls.secPrice"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="2">
+                                        <el-form-item class="item" style="margin-top: 35px;">
+                                            <el-button type="danger" @click.prevent="removeQueryVia(ls)">删除</el-button>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                            <el-row v-if="info.length!==0">
+                                <el-button @click="addQueryVia">新增经停车站</el-button>
+                                <el-button type="primary" @click="modTrain">确认修改车次信息</el-button>
+                            </el-row>
+                        </el-form>
                     </div>
                     <div v-if="tabtab==2">
                         <div style="">
@@ -66,7 +124,7 @@
                                         </el-col>
                                         <el-col :span="2">
                                             <el-form-item class="item" style="margin-top: 35px;">
-                                                <el-button @click.prevent="removeVia(ls)">删除</el-button>
+                                                <el-button type="danger" @click.prevent="removeVia(ls)">删除</el-button>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -167,7 +225,8 @@
         "Nov": "11",
         "Dec": "12",
     };
-    var cnt=0
+    var cnt=0;
+    var qcnt=0;
     export default {
         name: "Admin",
         data() {
@@ -198,11 +257,15 @@
                         }
                     ]
                 },
-                list: []
+                list: [],
+                info:[]
             };
         },
         components: {Header},
         methods: {
+            substr(s){
+              return s[0]+s[1]+s[2]+s[3]+s[4];
+            },
             fun(t){
                 return t[24] + t[25] + t[26] + t[27] + '-' + ms[t[4] + t[5] + t[6]] + '-' + t[8] + t[9];
             },
@@ -313,11 +376,24 @@
                 t.idx=cnt
                 this.trains.list.push(t);
             },
+            addQueryVia() {
+                qcnt++;
+                var t={};
+                t.idx=qcnt
+                this.info.push(t);
+            },
             removeVia(item) {
                 var index = this.trains.list.indexOf(item)
                 if (index !== -1) {
                     this.trains.list.splice(index, 1)
                     cnt--;
+                }
+            },
+            removeQueryVia(item) {
+                var index = this.info.indexOf(item)
+                if (index !== -1) {
+                    this.info.splice(index, 1)
+                    qcnt--;
                 }
             },
             addTrain() {
@@ -332,7 +408,28 @@
                     console.log(res.data);
                     if (res.data.msg === "true") {
                         v.$message('添加成功');
-                        v.$router.push("/admin");
+                        // v.$router.go(0);
+                        // v.$router.push("/admin");
+                    } else {
+                        v.$message('网络或内部错误');
+                    }
+                });
+            },
+            modTrain() {
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    url: api.base_url + '/admin/train/mod',
+                    data: {
+                        'trNo':v.trNo,
+                        'list':v.info,
+                    }
+                }).then(function (res) {
+                    console.log(res.data);
+                    if (res.data.msg === "true") {
+                        v.$message('修改成功');
+                        // v.$router.go(0);
+                        // v.$router.push("/admin");
                     } else {
                         v.$message('网络或内部错误');
                     }
@@ -350,6 +447,7 @@
                     console.log(res.data);
                     if (res.data.msg === "true") {
                         //log
+                        v.info=res.data.list;
                     } else {
                         v.$message('网络或内部错误');
                     }
