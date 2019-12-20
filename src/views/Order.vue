@@ -61,7 +61,7 @@
                     </el-collapse>
                 </div>
             </div>
-            <div v-if="active===0 ||active===1">
+            <div v-if="(active===0 ||active===1 && seats.length!==0)  ">
                 <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
             </div>
             <div v-if="active===2">
