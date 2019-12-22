@@ -64,6 +64,10 @@
         methods: {
             onSubmit() {
                 console.log('submit!');
+                if(this.st==='' || this.ed===' ' || this.date.toString()===''){
+                    this.$message('请输入正确信息');
+                    return;
+                }
                 this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date.toString()}});
             },
             getStations(){
