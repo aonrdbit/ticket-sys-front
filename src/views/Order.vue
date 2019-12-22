@@ -20,10 +20,10 @@
                         <el-input v-model="addName" placeholder="请输入姓名"></el-input>
                     </el-form-item>
                     <el-form-item label="身份证号码">
-                        <el-input v-model="addID" placeholder="请输入姓名"></el-input>
+                        <el-input v-model="addID" placeholder="请输入身份证号码"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号码">
-                        <el-input v-model="addPhone" placeholder="请输入姓名"></el-input>
+                        <el-input v-model="addPhone" placeholder="请输入手机号码"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="addLine">增加</el-button>
@@ -50,6 +50,7 @@
             </div>
             <div v-if="active===1">
                 <el-divider></el-divider>
+                <span>1车厢为一等座，2，3车厢为二等座</span>
                 <div>
                     <el-collapse v-for="c in seats" :key="c.cx">
                         <el-collapse-item :title="c.cx+'车厢'">
@@ -172,7 +173,7 @@
                 return x.substr(3, 5)
             },
             submit() {
-                //支付创建接口，待填坑
+                //支付创建接口
                 for (let i = 0; i < this.multipleSelection.length; i++) {
                     console.log(this.multipleSelection[i]);
                 }
@@ -205,7 +206,7 @@
                         v.$message("支付成功");
                         v.$router.push("/user")
                     } else {
-                        v.$message('网络或内部错误');
+                        v.$message('订单信息错误，请检查乘客是否已购买当前班次车票');
                     }
                 }).catch(function (err) {
                     console.log("err", err);
@@ -232,10 +233,10 @@
                     method: 'post',
                     url: api.base_url + '/user/passenger/add',
                     data: {
-                        "userId": v.$store.state.userId,
-                        "Name": v.addName,
-                        "ID": v.addID,
-                        "phone": v.addPhone,
+                        "userId": v.$store.state.userId+"",
+                        "Name": v.addName+"",
+                        "ID": v.addID+"",
+                        "phone": v.addPhone+"",
                     }
                 }).then(function (res) {
                     console.log(res.data);

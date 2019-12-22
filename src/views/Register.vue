@@ -4,7 +4,7 @@
         <div class="signin-form">
             <h3 class="sign-title">ticket-sys 注册</h3>
             <div>
-                <el-form :model="regForm" :rules="rules" status-icon ref="ruleForm" class="demo-ruleForm">
+                <el-form :model="regForm" :rules="rules" status-icon class="demo-ruleForm">
                     <el-form-item prop="username">
                         <el-input
                                 v-model="regForm.username"
@@ -92,6 +92,28 @@
                     callback();
                 }
             };
+            var phoneVa=(rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入手机号码'));
+                } else if (value.length!==11) {
+                    callback(new Error('请输入正确的手机号码!'));
+                }else if(!(/^1\\d{10}$/.test(value.toString()))){
+                    callback(new Error('请输入正确的手机号码!'));
+                } else {
+                    callback();
+                }
+            };
+            var IDVa=(rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入身份证号码'));
+                } else if (value.length!==18) {
+                    callback(new Error('请输入正确的身份证号码!'));
+                } else if(!(/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(value.toString()))){
+                    callback(new Error('请输入正确的身份证号码!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 regForm: {
                     username: '',
@@ -116,10 +138,10 @@
                         {required: true, message: '请输入真实姓名', trigger: 'blur'},
                     ],
                     ID: [
-                        {required: true, message: '请输入身份证号码', trigger: 'blur'},
+                        {validator:IDVa, trigger: 'blur'},
                     ],
                     phone: [
-                        {required: true, message: '请输入手机号码', trigger: 'blur'},
+                        {validator:phoneVa, trigger: 'blur'},
                     ],
                 }
             }

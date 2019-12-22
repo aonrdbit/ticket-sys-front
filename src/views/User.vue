@@ -12,7 +12,7 @@
                                 {{o.trNo}} {{o.st}}====>{{o.ed}}
                                 {{fun(o.st_date)}} {{o.st_time}}开
                             </span>
-<!--                                <el-button style="float: right; padding: 3px 0" type="text" @click="quit">取消订单</el-button>-->
+                                <!--                                <el-button style="float: right; padding: 3px 0" type="text" @click="quit">取消订单</el-button>-->
                             </div>
                             <div class="text item">
                                 <el-table
@@ -106,6 +106,27 @@
                         </el-table>
                     </div>
                 </el-tab-pane>
+                <el-tab-pane label="修改密码" name="third">
+                    <div style="margin:0 auto; width: 400px;">
+                        <h3 class="sign-title">修改密码</h3>
+                        <div style="text-align: justify">
+                            <el-form label-position="left" label-width="100px" :model="changeForm" :rules="rules">
+                                <el-form-item label="原密码">
+                                    <el-input v-model="changeForm.oldPass" placeholder="请输入原密码"></el-input>
+                                </el-form-item>
+                                <el-form-item label="新密码">
+                                    <el-input v-model="changeForm.newPass" placeholder="请输入新密码"></el-input>
+                                </el-form-item>
+                                <el-form-item label="确认新密码">
+                                    <el-input v-model="changeForm.reNewPass" placeholder="请再次输入新密码"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="changePass">确认修改</el-button>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                    </div>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -123,21 +144,83 @@
     };
     import Header from "../components/Header";
     import api from "../constant/api";
+
     export default {
         name: "User",
         components: {Header},
         data() {
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.changeForm.reNewPass !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.changeForm.newPass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
-                addName:"",
-                addID:"",
-                addPhone:"",
-                friends:[],
+                addName: "",
+                addID: "",
+                addPhone: "",
+                friends: [],
                 activeName: 'first',
-                orders:[]
+                orders: [],
+                changeForm:{
+                    oldPass:'',
+                    newPass:'',
+                    reNewPass:'',
+                },
+                rules: {
+                    oldPass:[
+                        {required: true, message: '请输入原密码', trigger: 'blur'},
+                    ],
+                    newPass: [
+                        {validator: validatePass, trigger: 'blur'},
+                    ],
+                    reNewPass: [
+                        {validator: validatePass2, trigger: 'blur'}
+                    ],
+                }
             };
         },
         methods: {
-            fun(t){
+            changePass(){
+                if(this.changeForm.newPass!==this.changeForm.reNewPass){
+                    this.$message('密码不一致');
+                    return;
+                }
+                let v = this;
+                this.$axios({
+                    method: 'post',
+                    url: api.base_url + '/user/pass/mod',
+                    data: {
+                        "userName": v.$store.state.username.toString(),
+                        "oldPass":v.changeForm.oldPass+"",
+                        "newPass":v.changeForm.newPass+""
+                    }
+                }).then(function (res) {
+                    v.$message(res.data.msg);
+                    if(res.data.msg==='修改成功'){
+                        v.changeForm.newPass='';
+                        v.changeForm.oldPass='';
+                        v.changeForm.reNewPass='';
+                    }
+                }).catch(function (err) {
+                    console.log(err)
+                    v.$message('网络或内部错误');
+                })
+            },
+            fun(t) {
                 return t[24] + t[25] + t[26] + t[27] + '-' + ms[t[4] + t[5] + t[6]] + '-' + t[8] + t[9];
             },
             getAllOrder() {
@@ -149,10 +232,8 @@
                         "userId": v.$store.state.userId.toString(),
                     }
                 }).then(function (res) {
-                    console.log("hello",res.data);
                     v.orders = res.data.list;
                 }).catch(function (err) {
-                    console.log("err", err);
                     v.$message('网络或内部错误');
                 })
             },
@@ -178,10 +259,10 @@
                     method: 'post',
                     url: api.base_url + '/user/passenger/add',
                     data: {
-                        "userId": v.$store.state.userId+"",
-                        "Name": v.addName+"",
-                        "ID": v.addID+"",
-                        "phone": v.addPhone+"",
+                        "userId": v.$store.state.userId + "",
+                        "Name": v.addName + "",
+                        "ID": v.addID + "",
+                        "phone": v.addPhone + "",
                     }
                 }).then(function (res) {
                     console.log(res.data);
@@ -201,8 +282,8 @@
                     method: 'post',
                     url: api.base_url + '/user/passenger/del',
                     data: {
-                        "userId": v.$store.state.userId+"",
-                        "psgId":row.psgId+"",
+                        "userId": v.$store.state.userId + "",
+                        "psgId": row.psgId + "",
                     }
                 }).then(function (res) {
                     console.log(res.data);
@@ -217,33 +298,33 @@
                     v.$message('网络或内部错误');
                 })
             },
-            check(y1,m1,d1,y2,m2,d2){
+            check(y1, m1, d1, y2, m2, d2) {
                 // console.log(y1,m1,d1,y2,m2,d2);
                 var se;
-                if(y2<y1){
-                    se=31-d2+d1;
-                }else{
-                    se=d1-d2;
+                if (y2 < y1) {
+                    se = 31 - d2 + d1;
+                } else {
+                    se = d1 - d2;
                 }
                 console.log(se)
                 return se > 7;
             },
-            tui(row,o){
+            tui(row, o) {
                 var now = new Date();
                 var year = now.getFullYear();
                 var month = now.getMonth() + 1;
                 var day = now.getDate();
                 // console.log(year,month,day)
                 // console.log(o.st_date)
-                if(row.status==='已退票'){
+                if (row.status === '已退票') {
                     this.$alert('该车票已退票', '', {
                         confirmButtonText: '确定',
                     });
                     return;
                 }
                 //Mon Dec 30 00:00:00 CST 2019
-                var t=o.st_date;
-                if(!this.check(parseInt(t[24] + t[25] + t[26] + t[27]),parseInt(ms[t[4] + t[5] + t[6]]),parseInt(t[8] + t[9]),year,month,day)){
+                var t = o.st_date;
+                if (!this.check(parseInt(t[24] + t[25] + t[26] + t[27]), parseInt(ms[t[4] + t[5] + t[6]]), parseInt(t[8] + t[9]), year, month, day)) {
                     this.$alert('不可以退开车时间在7天之内的车票', '', {
                         confirmButtonText: '确定',
                     });
@@ -259,11 +340,11 @@
                         method: 'post',
                         url: api.base_url + '/order/del',
                         data: {
-                            "orId":o.orId+"",
-                            "psgId":row.psgId+"",
-                            "seNo":row.cx+"-"+row.zw,
-                            "st":o.st+"",
-                            "ed":o.ed+"",
+                            "orId": o.orId + "",
+                            "psgId": row.psgId + "",
+                            "seNo": row.cx + "-" + row.zw,
+                            "st": o.st + "",
+                            "ed": o.ed + "",
                         }
                     }).then(function (res) {
                         console.log(res.data);

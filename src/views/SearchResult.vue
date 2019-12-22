@@ -36,14 +36,15 @@
             </el-form>
         </div>
         <div style="height: 15px;"></div>
-        <div style="margin:0 auto; width: 1040px;">
+        <div style="margin:0 auto; width: 1140px;">
             <el-table
+                    v-loading="loading"
                     :data="list"
                     style="width: 100%">
                 <el-table-column
                         prop="trNo"
                         label="车次"
-                        width="60">
+                        width="70">
                 </el-table-column>
                 <el-table-column
                         prop="st"
@@ -111,6 +112,7 @@
         components: {Header},
         data() {
             return {
+                loading:true,
                 st: '',
                 ed: '',
                 value: '',
@@ -160,6 +162,7 @@
                     console.log(res.data);
                     if (res.data.msg === "true") {
                         v.list=res.data.list;
+                        v.loading=false;
                     } else {
                         v.$message('网络或内部错误');
                     }
