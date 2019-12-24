@@ -215,6 +215,7 @@
             },
             handleSeat(c, s, che) {
                 if (che === true) {
+                    //{c,s} bug
                     this.multipleSeat.push(s);
                 } else {
                     let idx = 0;
