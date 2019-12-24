@@ -97,7 +97,7 @@
                     callback(new Error('请输入手机号码'));
                 } else if (value.length!==11) {
                     callback(new Error('请输入正确的手机号码!'));
-                }else if(!(/^1\\d{10}$/.test(value.toString()))){
+                }else if(!( /^1[34578]\d{9}$/.test(value.toString()))){
                     callback(new Error('请输入正确的手机号码!'));
                 } else {
                     callback();
