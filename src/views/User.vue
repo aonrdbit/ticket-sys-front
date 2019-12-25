@@ -112,13 +112,13 @@
                         <div style="text-align: justify">
                             <el-form label-position="left" label-width="100px" :model="changeForm" :rules="rules">
                                 <el-form-item label="原密码">
-                                    <el-input v-model="changeForm.oldPass" placeholder="请输入原密码"></el-input>
+                                    <el-input v-model="changeForm.oldPass" type="password" placeholder="请输入原密码"></el-input>
                                 </el-form-item>
                                 <el-form-item label="新密码">
-                                    <el-input v-model="changeForm.newPass" placeholder="请输入新密码"></el-input>
+                                    <el-input v-model="changeForm.newPass" type="password" placeholder="请输入新密码"></el-input>
                                 </el-form-item>
                                 <el-form-item label="确认新密码">
-                                    <el-input v-model="changeForm.reNewPass" placeholder="请再次输入新密码"></el-input>
+                                    <el-input v-model="changeForm.reNewPass" type="password" placeholder="请再次输入新密码"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="changePass">确认修改</el-button>
