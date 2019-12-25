@@ -133,6 +133,7 @@
                     return;
                 }
                 this.$router.push({path:"/list",query:{st:this.st,ed:this.ed,date:this.date.toString()}});
+                this.loading=true;
                 this.getList();
             },
             handleClick(row) {

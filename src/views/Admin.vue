@@ -365,7 +365,7 @@
                 this.$refs[formName].resetFields();
             },
             removeDomain(item) {
-                var index = this.dynamicValidateForm.domains.indexOf(item)
+                var index = this.dynamicValidateForm.domains.indexOf(item);
                 if (index !== -1) {
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
@@ -373,26 +373,26 @@
             addVia() {
                 cnt++;
                 var t={};
-                t.idx=cnt
+                t.idx=cnt;
                 this.trains.list.push(t);
             },
             addQueryVia() {
                 qcnt++;
                 var t={};
-                t.idx=qcnt
+                t.idx=qcnt;
                 this.info.push(t);
             },
             removeVia(item) {
-                var index = this.trains.list.indexOf(item)
+                var index = this.trains.list.indexOf(item);
                 if (index !== -1) {
-                    this.trains.list.splice(index, 1)
+                    this.trains.list.splice(index, 1);
                     cnt--;
                 }
             },
             removeQueryVia(item) {
-                var index = this.info.indexOf(item)
+                var index = this.info.indexOf(item);
                 if (index !== -1) {
-                    this.info.splice(index, 1)
+                    this.info.splice(index, 1);
                     qcnt--;
                 }
             },
@@ -417,11 +417,14 @@
             },
             modTrain() {
                 let v = this;
+                for(var i=0;i<v.info.length;i++){
+                    v.info[i].dwellTime+="";
+                }
                 this.$axios({
                     method: 'post',
                     url: api.base_url + '/admin/train/mod',
                     data: {
-                        'trNo':v.trNo,
+                        'trNo':v.trNo+"",
                         'list':v.info,
                     }
                 }).then(function (res) {
@@ -448,6 +451,7 @@
                     if (res.data.msg === "true") {
                         //log
                         v.info=res.data.list;
+                        qcnt=v.info.length;
                     } else {
                         v.$message('网络或内部错误');
                     }
