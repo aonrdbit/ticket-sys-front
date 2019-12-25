@@ -214,13 +214,15 @@
                 })
             },
             handleSeat(c, s, che) {
+                console.log(c,s,che);
+                console.log(this.multipleSeat);
                 if (che === true) {
-                    //{c,s} bug
                     this.multipleSeat.push(s);
                 } else {
                     let idx = 0;
                     for (let i = 0; i < this.multipleSeat.length; i++) {
-                        if (this.multipleSeat[i] === s.trId) {
+                        // console.log(this.multipleSeat[i],s)
+                        if (this.multipleSeat[i] ===s) {
                             idx = i;
                         }
                     }
@@ -229,6 +231,10 @@
                 }
             },
             addLine() {
+                if(this.addName==='' || this.addID==='' || this.addID.length!==18 || this.addPhone==='' || this.addPhone.length!==11){
+                    this.$message('请输入正确的乘客信息');
+                    return;
+                }
                 let v = this;
                 this.$axios({
                     method: 'post',

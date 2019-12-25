@@ -78,6 +78,7 @@
                         if(v.$route.query.redirect!==null && v.$route.query.redirect!==undefined && v.$route.query.redirect!=="/register"){
                             v.$router.push(v.$route.query.redirect);
                         }else{
+                            // console.log(v.loginForm.username)
                             if(v.loginForm.username==='admin'){
                                 v.$router.push("/admin");
                             }else{
